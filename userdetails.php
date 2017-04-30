@@ -1,3 +1,9 @@
+<?php
+session_start();
+include_once 'src/connect.php';
+include_once 'src/Tweet.php';
+include_once 'src/User.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,37 +22,38 @@
         <!-- Here is our main header that is used accross all the pages of our website -->
 
         <header>
-            <h1>Header</h1>
+            <h1>Moje konto</h1>
         </header>
 
         <nav>
             <ul>
                 <li><a href="main.php">Strona główna</a></li>
                 <li><a href="userdetails.php">Moje konto</a></li>
-                <li><a href="#">Wyloguj</a></li>
+                <li><a href="logout">Wyloguj</a></li>
             </ul>
         </nav>
 
         <main>
 
             <!-- It contains an article -->
-            <section>
-                <h2>Wszystkie wpisy użytkownika:</h2>
-                <article>
+             <section>
+                <h2>Wszystkie wpisy:</h2>
+                <?php
+                $id=$_SESSION['id'];
+                $username=$_SESSION['username'];
+                $tweet1=Tweet::loadAllTweetsByUserId($conn, $id); 
+                
+                for ($i = 0; $i < count($tweet1); $i++) {
 
-                    <h3>Dnia:</h3>
+                    $creationDate = $tweet1[$i]->getCreationDate();
+                    $userId = $tweet1[$i]->getUserId();
+                    $text = $tweet1[$i]->getText();
+                    $user1 = User::loadUserById($conn, $userId);
+                    $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
 
-                    <p>Jakaś data</p>
-
-                    <h3>Użytkownik</h3>
-
-                    <p>Na przykład Pan Andrzej</p>
-
-                    <h3>Treść wpisu</h3>
-
-                    <p>Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum soclis natoque penatibus et manis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.</p>
-
-                </article>
+                    echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+                }
+                ?>
             </section>
 
 

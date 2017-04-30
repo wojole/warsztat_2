@@ -3,12 +3,24 @@ session_start();
 if (!isset($_SESSION['id'])) {
     header('Location:login.php');
     exit();
-} else {
-    echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
 }
 include_once 'src/connect.php';
 include_once 'src/Tweet.php';
 include_once 'src/User.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['addTweet'])) {
+        $addTweet = trim($_POST['addTweet']);
+        $id = $_SESSION['id'];
+
+        $tweet1 = new Tweet();
+        $tweet1->setUserId($id);
+        $tweet1->setText($addTweet);
+        $tweet1->setCreationDate();
+        $tweet1->saveToDB($conn);
+    }
+}
+
 $tweet1 = Tweet::loadAllTweets($conn);
 ?>
 <!DOCTYPE html>
@@ -16,7 +28,7 @@ $tweet1 = Tweet::loadAllTweets($conn);
     <head>
         <meta charset="utf-8">
 
-        <title>My page title</title>
+        <title>Strona główna</title>
 
 
         <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
@@ -26,10 +38,12 @@ $tweet1 = Tweet::loadAllTweets($conn);
     </head>
 
     <body>
-        <!-- Here is our main header that is used accross all the pages of our website -->
-
+        
+        <?php
+        echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
+        ?>
         <header>
-            <h1>Header</h1>
+            <h1>Strona główna</h1>
         </header>
 
         <nav>
@@ -42,29 +56,29 @@ $tweet1 = Tweet::loadAllTweets($conn);
 
         <main>
 
-            <!-- It contains an article -->
-            <section>
-                <h2>Wszystkie wpisy:</h2>
-<?php
-for ($i = 0; $i < count($tweet1); $i++) {
-
-    $creationDate = $tweet1[$i]->getCreationDate();
-    $userId = $tweet1[$i]->getUserId();
-    $text = $tweet1[$i]->getText();
-    $user1 = User::loadUserById($conn, $userId);
-    $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
-
-    echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
-}
-?>
-            </section>
             <section>
                 <h2>Dodaj nowy wpis:</h2>
-                <form>
+                <form action="main.php" method="post">
                     <input type="text" name="addTweet">
                     <input type="submit" value="Dodaj wpis!">
                 </form>
             </section>
+            <section>
+                <h2>Wszystkie wpisy:</h2>
+                <?php
+                for ($i = 0; $i < count($tweet1); $i++) {
+
+                    $creationDate = $tweet1[$i]->getCreationDate();
+                    $userId = $tweet1[$i]->getUserId();
+                    $text = $tweet1[$i]->getText();
+                    $user1 = User::loadUserById($conn, $userId);
+                    $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
+
+                    echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+                }
+                ?>
+            </section>
+
 
 
         </main>
