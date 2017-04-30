@@ -124,5 +124,23 @@ class User {
         }
         return true;
     }
+    
+    static public function loadUserByEmail(PDO $conn, $email) {
+        $stmt = $conn->prepare('SELECT * FROM Users WHERE email=:email');
+        $result = $stmt->execute(['email' => $email]);
+
+        if ($result === true && $stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $loadedUser = new User();
+            $loadedUser->id = $row['id'];
+            $loadedUser->username = $row['username'];
+            $loadedUser->hashPass = $row['hash_pass'];
+            $loadedUser->email = $row['email'];
+
+            return $loadedUser; //zwracany jest obiekt
+        }
+        return null;
+    }
 
 }

@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('Location:login.php');
+    exit();
+} else {
+    echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
+}
 include_once 'src/connect.php';
 include_once 'src/Tweet.php';
 include_once 'src/User.php';
@@ -29,7 +36,7 @@ $tweet1 = Tweet::loadAllTweets($conn);
             <ul>
                 <li><a href="main.php">Strona główna</a></li>
                 <li><a href="userdetails.php">Moje konto</a></li>
-                <li><a href="#">Wyloguj</a></li>
+                <li><a href="logout.php">Wyloguj</a></li>
             </ul>
         </nav>
 
@@ -38,18 +45,18 @@ $tweet1 = Tweet::loadAllTweets($conn);
             <!-- It contains an article -->
             <section>
                 <h2>Wszystkie wpisy:</h2>
-                <?php
-                for ($i = 0; $i < count($tweet1); $i++) {
+<?php
+for ($i = 0; $i < count($tweet1); $i++) {
 
-                    $creationDate = $tweet1[$i]->getCreationDate();
-                    $userId = $tweet1[$i]->getUserId();
-                    $text = $tweet1[$i]->getText();
-                    $user1=User::loadUserById($conn, $userId);
-                    $username=$user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
+    $creationDate = $tweet1[$i]->getCreationDate();
+    $userId = $tweet1[$i]->getUserId();
+    $text = $tweet1[$i]->getText();
+    $user1 = User::loadUserById($conn, $userId);
+    $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
 
-                    echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
-                }
-                ?>
+    echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+}
+?>
             </section>
             <section>
                 <h2>Dodaj nowy wpis:</h2>

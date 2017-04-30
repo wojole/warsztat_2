@@ -21,6 +21,10 @@
 //$user1=User::loadUserById($conn, 5); //wczytuje z bazy użytkownika nr. 6
 //$user1->delete($conn);
 
+//wczytanie użytkownika po emailu:
+
+//$user1=User::loadUserByEmail($conn, $email); //funkcojnalność użyta przy weryfikacji logowania
+
 //TWEET:
 //
 //dodanie nowego tweeta:
