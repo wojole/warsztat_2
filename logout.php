@@ -6,7 +6,7 @@
      session_unset();
      session_destroy();
      
-     echo "Zapraszmy ponownie!";
+     header('Location:login.php');
 
 
   }

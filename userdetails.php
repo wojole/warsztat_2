@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id'])) {
+    header('Location:login.php');
+    exit();
+}
 include_once 'src/connect.php';
 include_once 'src/Tweet.php';
 include_once 'src/User.php';
@@ -50,8 +54,10 @@ include_once 'src/User.php';
                     $text = $tweet1[$i]->getText();
                     $user1 = User::loadUserById($conn, $userId);
                     $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
+                    $tweetId=$tweet1[$i]->getId();
 
                     echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+                    echo "<a href=\"messagedetails.php?id=$tweetId\">Szczegóły</a><br>";
                 }
                 ?>
             </section>

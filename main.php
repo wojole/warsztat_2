@@ -73,8 +73,10 @@ $tweet1 = Tweet::loadAllTweets($conn);
                     $text = $tweet1[$i]->getText();
                     $user1 = User::loadUserById($conn, $userId);
                     $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
+                    $tweetId=$tweet1[$i]->getId();
 
                     echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+                    echo "<a href=\"messagedetails.php?id=$tweetId\">Szczegóły</a><br>";
                 }
                 ?>
             </section>
