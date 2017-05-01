@@ -62,3 +62,17 @@
 //    echo $value->getText();
 //    echo '<br>';
 //}
+
+
+//Comment.php
+//
+//Ładuje komentarz na podstawie jego Id:
+//$comment1=Comment::loadCommentById($conn,1);
+//
+//Ładuje wszystkie komentarza dotyczące danego posta:
+//$comment1=Comment::loadAllCommentsByPostId($conn,1);
+//
+//wczytuje dany id, modyfikuje jego element i zapisuje do bazy danych
+//$comment1=Comment::loadCommentById($conn,1);
+//$comment1->setText("hłehłehłe");
+//$comment1->saveToDB($conn);
