@@ -76,3 +76,19 @@
 //$comment1=Comment::loadCommentById($conn,1);
 //$comment1->setText("hłehłehłe");
 //$comment1->saveToDB($conn);
+
+//Message.php
+//Ładuje wiadomość na podstawie jej Id:
+//$message1=Message::loadMessageById($conn, 1);
+
+//Ładuje wszystkie wadomości na podstawie id odbiorcy
+//$message1=Message::loadAllMessagesByRecieverId($conn, 2);
+
+//Tworzy nowy obiekt, nadaje mu atrybuty i zapisuje do bazy danych:
+//$message1=new Message();
+//$message1->setDatetime();
+//$message1->setReaded(0);
+//$message1->setSenderId(2);
+//$message1->setReceiverId(1);
+//$message1->setText('tekst wiadomości');
+//$message1->saveToDB($conn);
