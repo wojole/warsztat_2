@@ -4,9 +4,19 @@ if (!isset($_SESSION['id'])) {
     header('Location:login.php');
     exit();
 }
+if($_SERVER['REQUEST_METHOD']=== 'GET') {
+    if(isset($_GET['id'])){
+        $id=trim($_GET['id']);
+
+
+    }
+}
 include_once 'src/connect.php';
 include_once 'src/Tweet.php';
 include_once 'src/User.php';
+
+$user1 = User::loadUserById($conn, $id); //nazwę użytkownika po id
+$username = $user1->getUsername();
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +36,7 @@ include_once 'src/User.php';
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1>Moje konto</h1>
+    <h1><?php echo $username; ?></h1>
 </header>
 
 <nav>
@@ -41,9 +51,21 @@ include_once 'src/User.php';
 
     <!-- It contains an article -->
     <section>
-        <h2>Wiadomości wysłane:</h2>
-        <h2>Wiadomości otrzymane:</h2>
+        <h2>Wszystkie wpisy:</h2>
+        <?php
 
+        $tweet1=Tweet::loadAllTweetsByUserId($conn, $id);
+
+        for ($i = 0; $i < count($tweet1); $i++) {
+
+            $creationDate = $tweet1[$i]->getCreationDate();
+            $text = $tweet1[$i]->getText();
+            $tweetId=$tweet1[$i]->getId();
+
+            echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
+            echo "<a href=\"postdetails.php?id=$tweetId\">Szczegóły</a><br>";
+        }
+        ?>
     </section>
 
 

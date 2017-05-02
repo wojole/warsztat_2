@@ -89,8 +89,8 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
             $tweetId=$tweet1[$i]->getId();
             $comments=Comment::loadAllCommentsByPostId($conn,$tweetId);
 
-            echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
-            echo "<a href=\"messagedetails.php?id=$tweetId\">Szczegóły</a><br>";
+            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$username</a>: <br> $text</p> </article>";
+            echo "<a href=\"postdetails.php?id=$tweetId\">Szczegóły</a><br>";
             echo "Komentarze: <br>";
             echo "<form action=\"main.php\" method=\"post\">
     <input type=\"text\" name=\"newComment\">
@@ -106,8 +106,8 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
                 $commentUsername = $user2->getUsername();
 
 
-                echo "<article><p>$creation_date, $commentUsername skomentował: <br> $commentText</p> </article>";
-//                echo ""
+                echo "<article><p>$creation_date, <a href=\"alluserposts.php?id=$commentUserId\">$commentUsername</a> skomentował: <br> $commentText</p> </article>";
+
             }
 
         }
