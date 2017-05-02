@@ -10,7 +10,7 @@ include_once 'src/User.php';
 include_once 'src/Comment.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['addTweet'])) {
+    if (isset($_POST['addTweet'])) { //odebranie treści nowego posta
         $addTweet = trim($_POST['addTweet']);
         $id = $_SESSION['id'];
 
@@ -20,9 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tweet1->setCreationDate();
         $tweet1->saveToDB($conn);
     }
+    if (isset($_POST['newComment'])) { //odebranie treści nowego komentarza
+        $newComment = trim($_POST['newComment']);
+        $postId = $_POST['postId'];
+        $id = $_SESSION['id'];
+
+        $comment1 = new Comment();
+        $comment1->setUserId($id);
+        $comment1->setPostId($postId);
+        $comment1->setText($newComment);
+        $comment1->setCreation_date();
+        $comment1->saveToDB($conn);
+    }
 }
 
-$tweet1 = Tweet::loadAllTweets($conn);
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,6 +78,7 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
     <section>
         <h2>Wszystkie wpisy:</h2>
         <?php
+        $tweet1 = Tweet::loadAllTweets($conn);
         for ($i = 0; $i < count($tweet1); $i++) {
 
             $creationDate = $tweet1[$i]->getCreationDate();
@@ -80,6 +92,11 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
             echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
             echo "<a href=\"messagedetails.php?id=$tweetId\">Szczegóły</a><br>";
             echo "Komentarze: <br>";
+            echo "<form action=\"main.php\" method=\"post\">
+    <input type=\"text\" name=\"newComment\">
+    <button name=\"postId\" value=\"$tweetId\" type=\"submit\">Dodaj komentarz</button>
+</form>"; //generuje pola do dodawania komentarza
+
             for ($j=0; $j <count($comments); $j++){
 
                 $commentUserId=$comments[$j]->getUserId();
@@ -90,9 +107,9 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
 
 
                 echo "<article><p>$creation_date, $commentUsername skomentował: <br> $commentText</p> </article>";
+//                echo ""
             }
 
-            //tutaj dodać fora iterującego po wczytanych wcześniej $comment1=Comment::loadAllCommentsByPostId($conn,1); i generującego echo article p z info o komentarzach
         }
         ?>
     </section>

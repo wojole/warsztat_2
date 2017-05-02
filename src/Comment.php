@@ -44,8 +44,9 @@ class Comment {
         $this->postId = $postId;
     }
 
-    public function setCreation_date($creation_date) {
-        $this->creation_date = $creation_date;
+    public function setCreation_date() {
+        $date1 = new DateTime();
+        $this->creation_date = $date1->format('Y-m-d H:i:s');
     }
 
     public function setText($text) {
@@ -78,8 +79,8 @@ class Comment {
         $ret = [];
 
         if ($result === true && $stmt->rowCount() > 0) {
-//            $stmt->fetch(PDO::FETCH_ASSOC);
-//zwraca tablicę z obiektami ale w sumie nie wiem czemu
+            //            $stmt->fetch(PDO::FETCH_ASSOC);
+            //zwraca tablicę z obiektami ale w sumie nie wiem czemu
             foreach ($stmt as $row) {
                 $loadedComment = new Comment();
                 $loadedComment->id = $row['id'];
