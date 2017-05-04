@@ -49,18 +49,26 @@ include_once 'src/Message.php';
         <?php
         $id = $_SESSION['id'];
         $messagesSent = Message::loadAllMessagesBySenderId($conn, $id);
+        function stringCut($string){
+            if(strlen($string) > 30){
+                $string=mb_substr($string,0,29);
+                return $string.'...';
+            }
+            return $string;
+        }
 
         for ($i = 0; $i < count($messagesSent); $i++) {
 
             $creationDate = $messagesSent[$i]->getDatetime();
             $toWhom = $messagesSent[$i]->getReceiverId();
             $text = $messagesSent[$i]->getText();
+            $shortText=stringCut($text);
             $messageId = $messagesSent[$i]->getId();
             $user1 = User::loadUserById($conn, $toWhom);
             $whomUsername = $user1->getEmail(); //podstawia nazwę użytkownika pod jego nr
 
 
-            echo "<article>Do: $whomUsername, Data wysłania: $creationDate<br> $text <br><form action=\"messagedetails.php\" method=\"post\">
+            echo "<article>Do: $whomUsername, Data wysłania: $creationDate<br> $shortText <br><form action=\"messagedetails.php\" method=\"post\">
     <button type=\"submit\" name=\"messageId\" value=\"$messageId\" >Szczegóły wiadomości</button>
     </form></article><br>";
 
@@ -83,13 +91,14 @@ include_once 'src/Message.php';
             $creationDate = $messagesReceived[$i]->getDatetime();
             $toWhom = $messagesReceived[$i]->getSenderId();
             $text = $messagesReceived[$i]->getText();
+            $shortText=stringCut($text);
             $messageId = $messagesReceived[$i]->getId();
             $readed = $messagesReceived[$i]->getReaded();
             $user1 = User::loadUserById($conn, $toWhom);
             $whomUsername = $user1->getEmail(); //podstawia nazwę użytkownika pod jego nr
 
 
-            echo isReceived($readed) . "<article>Od: $whomUsername, Dnia: $creationDate <br> $text<br><form action=\"messagedetails.php\" method=\"post\">
+            echo isReceived($readed) . "<article>Od: $whomUsername, Dnia: $creationDate <br> $shortText<br><form action=\"messagedetails.php\" method=\"post\">
     <button type=\"submit\" name=\"messageId\" value=\"$messageId\" >Szczegóły wiadomości</button>
     </form></article><br>";
 
