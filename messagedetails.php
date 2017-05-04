@@ -4,9 +4,9 @@ if (!isset($_SESSION['id'])) {
     header('Location:login.php');
     exit();
 }
-if ($_SERVER['REQUEST_METHOD'] ==='POST'){
-    if(isset($_POST['messageId'])){
-        $messageId=$_POST['messageId'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['messageId'])) {
+        $messageId = $_POST['messageId'];
     }
 
 }
@@ -15,21 +15,24 @@ include_once 'src/Tweet.php';
 include_once 'src/User.php';
 include_once 'src/Message.php';
 
-$message1=Message::loadMessageById($conn, $messageId);
-$receiver=$message1->getReceiverId();
+$message1 = Message::loadMessageById($conn, $messageId);
+$receiver = $message1->getReceiverId();
 
-if($receiver=== $_SESSION['id']){
+if ($receiver === $_SESSION['id']) {
 
     $message1->setReaded(1);
     $message1->saveToDB($conn);
 }
 
-$sender=$message1->getSenderId();
-$date=$message1->getDatetime();
-$text=$message1->getText();
+$sender = $message1->getSenderId();
+$date = $message1->getDatetime();
+$text = $message1->getText();
 
-$user1=User::loadUserById($conn,$sender);
-$senderName=$user1->getUsername();
+$user1 = User::loadUserById($conn, $sender);
+$senderName = $user1->getEmail();
+
+$user2 = User::loadUserById($conn, $receiver);
+$receiverName = $user2->getEmail();
 ?>
 <!DOCTYPE html>
 <html>
@@ -56,6 +59,7 @@ $senderName=$user1->getUsername();
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>
@@ -66,15 +70,19 @@ $senderName=$user1->getUsername();
     <section>
         <h2>Nadawca:</h2>
         <?php
-echo $senderName;
+        echo $senderName;
+        ?>
+        <h2>Odbiorca:</h2>
+        <?php
+        echo $receiverName;
         ?>
         <h2>Dnia:</h2>
         <?php
-echo $date;
+        echo $date;
         ?>
         <h2>Treść:</h2>
         <?php
-echo $text;
+        echo $text;
         ?>
 
     </section>

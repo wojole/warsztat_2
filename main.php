@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <?php
-echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
+echo "Witaj {$_SESSION["email"]}!";
 ?>
 <header>
     <h1>Strona główna</h1>
@@ -62,6 +62,7 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>
@@ -71,7 +72,7 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
     <section>
         <h2>Dodaj nowy wpis:</h2>
         <form action="main.php" method="post">
-            <input type="text" name="addTweet">
+            <textarea name="addTweet" maxlength="140"></textarea>
             <input type="submit" value="Dodaj wpis!">
         </form>
     </section>
@@ -85,23 +86,23 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
             $userId = $tweet1[$i]->getUserId();
             $text = $tweet1[$i]->getText();
             $user1 = User::loadUserById($conn, $userId);
-            $username = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
-            $tweetId=$tweet1[$i]->getId();
-            $comments=Comment::loadAllCommentsByPostId($conn,$tweetId);
+            $email = $user1->getEmail(); //podstawia email użytkownika pod jego nr
+            $tweetId = $tweet1[$i]->getId();
+            $comments = Comment::loadAllCommentsByPostId($conn, $tweetId);
 
-            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$username</a>: <br> $text<br><a href=\"postdetails.php?id=$tweetId\">Szczegóły wpisu</a></p></article>";
+            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$email</a>: <br> $text<br><a href=\"postdetails.php?id=$tweetId\">Szczegóły wpisu</a></p></article>";
 
             echo "Komentarze: <br>";
             echo "<form action=\"main.php\" method=\"post\">
-    <input type=\"text\" name=\"newComment\">
+    <textarea name=\"newComment\" maxlength=\"60\"></textarea>
     <button name=\"postId\" value=\"$tweetId\" type=\"submit\">Dodaj komentarz</button>
 </form>"; //generuje pola do dodawania komentarza
 
-            for ($j=0; $j <count($comments); $j++){
+            for ($j = 0; $j < count($comments); $j++) {
 
-                $commentUserId=$comments[$j]->getUserId();
-                $creation_date=$comments[$j]->getCreation_date();
-                $commentText=$comments[$j]->getText();
+                $commentUserId = $comments[$j]->getUserId();
+                $creation_date = $comments[$j]->getCreation_date();
+                $commentText = $comments[$j]->getText();
                 $user2 = User::loadUserById($conn, $commentUserId);
                 $commentUsername = $user2->getUsername();
 
@@ -113,7 +114,6 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
         }
         ?>
     </section>
-
 
 
 </main>

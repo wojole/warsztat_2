@@ -3,14 +3,33 @@ session_start();
 if (!isset($_SESSION['id'])) {
     header('Location:login.php');
     exit();
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+}
+include_once 'src/connect.php';
+include_once 'src/Tweet.php';
+include_once 'src/User.php';
+include_once 'src/Comment.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $id = trim($_GET['id']);
 
-        include_once 'src/connect.php';
-        include_once 'src/Tweet.php';
-        include_once 'src/User.php';
-        include_once 'src/Comment.php';
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//odbiera dane z formularza i dodaje jako komentarz
+
+    if (isset($_POST['postId']) && isset($_POST['newComment'])) {
+
+        $who = $_SESSION['id'];
+        $newComment = $_POST['newComment'];
+        $id = $_POST['postId'];
+
+        $comment1 = new Comment();
+        $comment1->setText($newComment);
+        $comment1->setPostId($id);
+        $comment1->setCreation_date();
+        $comment1->setUserId($who);
+        $comment1->saveToDB($conn);
     }
 }
 ?>
@@ -47,26 +66,24 @@ if (!isset($_SESSION['id'])) {
     <section>
         <?php
         $tweet1 = Tweet::loadTweetById($conn, $id);
+        //        $tweetId= $tweet1->getId();
         $text = $tweet1->getText();
-        $creationDate = $tweet1->getCreationDate();
         $authorId = $tweet1->getUserId();
         $user1 = User::loadUserById($conn, $authorId);
-        $authorName = $user1->getUsername();
+        $authorName = $user1->getEmail();
 
         echo "<article>
                     <h2>Szczegóły wpisu:</h2>
 
 
-                 <h3>Autor</h3>
-
-                    <p>$authorName</p>
-
-
                  <h3>Treść</h3>
 
                     <p>$text</p>
-                 <h3>Data stworzenia lub modyfikacji</h3>
-                    <p>$creationDate</p>"
+
+
+                 <h3>Autor</h3>
+
+                    <p>$authorName</p>"
         ?>
 
         <h3>Komentarze</h3>
@@ -84,8 +101,14 @@ if (!isset($_SESSION['id'])) {
             echo "<p>$creation_date, $commentUsername skomentował: <br> $commentText</p>";
 
         }
+        echo "<form action=\"postdetails.php\" method=\"post\">
+            Skomentuj:<br>
+            <textarea name=\"newComment\" maxlength=\"60\"></textarea>
+            <button name=\"postId\" value=\"$id\" type=\"submit\">Dodaj komentarz</button>
+        </form>";
 
         ?>
+
         </article>
 
     </section>

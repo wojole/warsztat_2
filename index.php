@@ -1,18 +1,8 @@
 <?php
-
-include_once 'src/connect.php';
-include_once 'src/User.php';
-include_once 'src/Tweet.php';
-
-
-
-
-
-
-
-
-
-
-
-
-
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('Location:login.php');
+    exit();
+}else{
+    header('Location:main.php');
+}

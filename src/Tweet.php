@@ -64,7 +64,7 @@ class Tweet {
 
     static public function loadAllTweetsByUserId(PDO $conn, $userId) {
 
-        $stmt = $conn->prepare('SELECT * FROM Tweet WHERE userId=:userId');
+        $stmt = $conn->prepare('SELECT * FROM Tweet WHERE userId=:userId ORDER BY creationDate DESC');
         $result = $stmt->execute(['userId' => $userId]);
         $ret = [];
 
@@ -85,7 +85,7 @@ class Tweet {
     }
 
     static public function loadAllTweets(PDO $conn) {
-        $sql = 'SELECT * FROM Tweet';
+        $sql = 'SELECT * FROM Tweet ORDER BY creationDate DESC';
         $ret = [];
 
         $result = $conn->query($sql);

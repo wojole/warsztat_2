@@ -14,7 +14,7 @@ include_once 'src/Message.php';
 <head>
     <meta charset="utf-8">
 
-    <title>My page title</title>
+    <title>O mnie</title>
 
 
     <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
@@ -27,9 +27,7 @@ include_once 'src/Message.php';
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1><?php
-        echo "{$_SESSION["username"]}:";
-        ?> Moje konto</h1>
+    <h1><?php echo "{$_SESSION["email"]}:";?> Moje konto</h1>
 
 </header>
 
@@ -37,6 +35,9 @@ include_once 'src/Message.php';
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
+        <li><a href="editAccount.php">Edytuj konto</a></li>
+        <li><a href="deleteConfirm.php">Usuń konto</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>
@@ -45,58 +46,9 @@ include_once 'src/Message.php';
 
     <!-- It contains an article -->
     <section>
-        <h2>Wiadomości wysłane:</h2>
-        <?php
-        $id=$_SESSION['id'];
-        $messagesSent=Message::loadAllMessagesBySenderId($conn, $id);
-
-        for ($i = 0; $i < count($messagesSent); $i++) {
-
-            $creationDate = $messagesSent[$i]->getDatetime();
-            $toWhom = $messagesSent[$i]->getReceiverId();
-            $text = $messagesSent[$i]->getText();
-            $messageId=$messagesSent[$i]->getId();
-            $user1 = User::loadUserById($conn, $toWhom);
-            $whomUsername = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
-
-
-            echo "<article>Dnia: $creationDate, Do: $whomUsername <br> $text <br><form action=\"messagedetails.php\" method=\"post\">
-    <button type=\"submit\" name=\"messageId\" value=\"$messageId\" >Szczegóły wiadomości</button>
-    </form></article><br>";
-
-        }
-        ?>
-        <h2>Wiadomości otrzymane:</h2>
-        <?php
-        $id=$_SESSION['id'];
-        $messagesReceived=Message::loadAllMessagesByRecieverId($conn, $id);
-
-        function isReceived($readed){
-            if($readed==0){
-                return "Nieodebrane";
-            }else return "Odebrane";
-        }
-
-        for ($i = 0; $i < count($messagesReceived); $i++) {
-
-            $creationDate = $messagesReceived[$i]->getDatetime();
-            $toWhom = $messagesReceived[$i]->getSenderId();
-            $text = $messagesReceived[$i]->getText();
-            $messageId=$messagesReceived[$i]->getId();
-            $readed=$messagesReceived[$i]->getReaded();
-            $user1 = User::loadUserById($conn, $toWhom);
-            $whomUsername = $user1->getUsername(); //podstawia nazwę użytkownika pod jego nr
-
-
-
-    echo isReceived($readed) . "<article>Dnia: $creationDate, Od: $whomUsername <br> $text<br><form action=\"messagedetails.php\" method=\"post\">
-    <button type=\"submit\" name=\"messageId\" value=\"$messageId\" >Szczegóły wiadomości</button>
-    </form></article><br>";
-
-
-
-        }
-        ?>
+        <h2>O mnie:</h2>
+     <?php $user1 = User::loadUserById($conn, $_SESSION['id']);
+     echo $user1->getUsername(); ?>
     </section>
 
 </main>

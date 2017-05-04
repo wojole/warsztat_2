@@ -55,7 +55,7 @@ class User {
             if ($result !== false) {
                 $this->id = $conn->lastInsertId();
                 return true;
-            }
+            }else echo "Błąd!";
         } else {//jeżeli id już istnieje, zaktualizuj rekord
             $stmt = $conn->prepare(
                     'UPDATE Users SET username=:username, email=:email, hash_pass=:hash_pass WHERE id=:id'

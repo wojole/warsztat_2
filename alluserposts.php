@@ -14,9 +14,11 @@ if($_SERVER['REQUEST_METHOD']=== 'GET') {
 include_once 'src/connect.php';
 include_once 'src/Tweet.php';
 include_once 'src/User.php';
+include_once 'src/Comment.php';
 
 $user1 = User::loadUserById($conn, $id); //nazwę użytkownika po id
-$username = $user1->getUsername();
+$email = $user1->getEmail();
+$about = $user1->getUsername();
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +38,8 @@ $username = $user1->getUsername();
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1><?php echo $username;?></h1>
+    <h1><?php echo $email;?></h1>
+    <h2><?php echo "O sobie: $about";?></h2>
 </header>
 
 <nav>
@@ -44,7 +47,7 @@ $username = $user1->getUsername();
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
         <?php if ($sessionId!==$id){
-            echo "<li><a href=\"sendMessage.php?id=$id\">Wyślij wiadomość do $username</a></li>";
+            echo "<li><a href=\"sendMessage.php?id=$id\">Wyślij wiadomość do $email</a></li>";
         } ?>
         <li><a href="logout">Wyloguj</a></li>
     </ul>
@@ -65,8 +68,13 @@ $username = $user1->getUsername();
             $text = $tweet1[$i]->getText();
             $tweetId=$tweet1[$i]->getId();
 
-            echo "<article> <p>$creationDate, $username: <br> $text</p> </article>";
-            echo "<a href=\"postdetails.php?id=$tweetId\">Szczegóły</a><br>";
+            $comment=Comment::loadAllCommentsByPostId($conn,$tweetId);
+
+            $numberOfComments=count($comment);
+
+            echo "<article> <p>$creationDate, $email: <br> $text</p> </article>";
+            echo "Ilość komentarzy: $numberOfComments";
+            echo " <a href=\"postdetails.php?id=$tweetId\">Szczegóły</a><br>";
         }
         ?>
     </section>
