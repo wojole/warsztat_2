@@ -89,8 +89,8 @@ echo "Udane logowanie! - Witaj {$_SESSION["username"]}!";
             $tweetId=$tweet1[$i]->getId();
             $comments=Comment::loadAllCommentsByPostId($conn,$tweetId);
 
-            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$username</a>: <br> $text</p> </article>";
-            echo "<a href=\"postdetails.php?id=$tweetId\">Szczegóły</a><br>";
+            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$username</a>: <br> $text<br><a href=\"postdetails.php?id=$tweetId\">Szczegóły wpisu</a></p></article>";
+
             echo "Komentarze: <br>";
             echo "<form action=\"main.php\" method=\"post\">
     <input type=\"text\" name=\"newComment\">

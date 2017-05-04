@@ -109,7 +109,7 @@ class Message
             'receiver_id' => $receiver_id,
         ]);
 
-        $ret = [];
+        $retRec = [];
 
         if ($result === true && $stmt->rowCount() > 0) {
             foreach ($stmt as $row) {
@@ -121,11 +121,37 @@ class Message
                 $loadedMessage->datetime = $row['datetime'];
                 $loadedMessage->readed = $row['readed'];
 
-                $ret[] = $loadedMessage;
+                $retRec[] = $loadedMessage;
 
             }
         }
-        return $ret;
+        return $retRec;
+    }
+
+    static public function loadAllMessagesBySenderId(PDO $conn, $sender_id)
+    {
+        $stmt = $conn->prepare('SELECT * FROM Messages WHERE sender_id=:sender_id');
+        $result = $stmt->execute([
+            'sender_id' => $sender_id,
+        ]);
+
+        $retSend = [];
+
+        if ($result === true && $stmt->rowCount() > 0) {
+            foreach ($stmt as $row) {
+                $loadedMessage = new Message();
+                $loadedMessage->id = $row['id'];
+                $loadedMessage->sender_id = $row['sender_id'];
+                $loadedMessage->receiver_id = $row['receiver_id'];
+                $loadedMessage->text = $row['text'];
+                $loadedMessage->datetime = $row['datetime'];
+                $loadedMessage->readed = $row['readed'];
+
+                $retSend[] = $loadedMessage;
+
+            }
+        }
+        return $retSend;
     }
 
     public function saveToDB(PDO $conn)
@@ -141,11 +167,26 @@ class Message
                 'datetime' => $this->datetime,
                 'readed' => $this->readed,
             ]);
-            if ($result!==false){
-                $this->id=$conn->lastInsertId();
+            if ($result!==false) {
+                $this->id = $conn->lastInsertId();
                 return true;
             }
-        }
+            } else {
+                $stmt=$conn->prepare('UPDATE Messages SET sender_id=:sender_id, receiver_id=:receiver_id, text=:text, datetime=:datetime, readed=:readed WHERE id=:id');
+                $result =$stmt->execute(
+                  [
+                      'sender_id' => $this->sender_id,
+                      'receiver_id' => $this->receiver_id,
+                      'text' => $this->text,
+                      'datetime' => $this->datetime,
+                      'readed' => $this->readed,
+                      'id'=> $this->id,
+                  ]);
+                if($result=== true){
+                    return true;
+                }
+            }
+
         return false;
     }
 }

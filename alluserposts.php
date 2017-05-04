@@ -7,7 +7,7 @@ if (!isset($_SESSION['id'])) {
 if($_SERVER['REQUEST_METHOD']=== 'GET') {
     if(isset($_GET['id'])){
         $id=trim($_GET['id']);
-
+        $sessionId=$_SESSION['id'];
 
     }
 }
@@ -36,13 +36,16 @@ $username = $user1->getUsername();
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1><?php echo $username; ?></h1>
+    <h1><?php echo $username;?></h1>
 </header>
 
 <nav>
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <?php if ($sessionId!==$id){
+            echo "<li><a href=\"sendMessage.php?id=$id\">Wyślij wiadomość do $username</a></li>";
+        } ?>
         <li><a href="logout">Wyloguj</a></li>
     </ul>
 </nav>

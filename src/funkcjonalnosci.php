@@ -84,6 +84,10 @@
 //Ładuje wszystkie wadomości na podstawie id odbiorcy
 //$message1=Message::loadAllMessagesByRecieverId($conn, 2);
 
+//Ładuje wszystkie wadomości na podstawie id nadawcy
+//$message1=Message::loadAllMessagesBySenderId($conn, 2);
+
+
 //Tworzy nowy obiekt, nadaje mu atrybuty i zapisuje do bazy danych:
 //$message1=new Message();
 //$message1->setDatetime();
