@@ -44,6 +44,7 @@ $user1 = User::loadUserById($conn, $_SESSION['id']);
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>

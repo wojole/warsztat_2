@@ -4,10 +4,10 @@ if (!isset($_SESSION['id'])) {
     header('Location:login.php');
     exit();
 }
-if($_SERVER['REQUEST_METHOD']=== 'GET') {
-    if(isset($_GET['id'])){
-        $id=trim($_GET['id']);
-        $sessionId=$_SESSION['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['id'])) {
+        $id = trim($_GET['id']);
+        $sessionId = $_SESSION['id'];
 
     }
 }
@@ -24,7 +24,6 @@ $about = $user1->getUsername();
 <html>
 <head>
     <meta charset="utf-8">
-
     <title>My page title</title>
 
 
@@ -38,39 +37,39 @@ $about = $user1->getUsername();
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1><?php echo $email;?></h1>
-    <h2><?php echo "O sobie: $about";?></h2>
+    <h1><?php echo $email; ?></h1>
+    <h2><?php echo "O sobie: $about"; ?></h2>
 </header>
 
 <nav>
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
-        <?php if ($sessionId!==$id){
-            echo "<li><a href=\"sendMessage.php?id=$id\">Wyślij wiadomość do $email</a></li>";
-        } ?>
-        <li><a href="logout">Wyloguj</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
+        <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>
 
 <main>
-
+    <?php if ($sessionId !== $id) {
+        echo "<li><a href=\"sendMessage.php?id=$id\">Wyślij wiadomość do $email</a></li>";
+    } ?>
     <!-- It contains an article -->
     <section>
         <h2>Wszystkie wpisy:</h2>
         <?php
 
-        $tweet1=Tweet::loadAllTweetsByUserId($conn, $id);
+        $tweet1 = Tweet::loadAllTweetsByUserId($conn, $id);
 
         for ($i = 0; $i < count($tweet1); $i++) {
 
             $creationDate = $tweet1[$i]->getCreationDate();
             $text = $tweet1[$i]->getText();
-            $tweetId=$tweet1[$i]->getId();
+            $tweetId = $tweet1[$i]->getId();
 
-            $comment=Comment::loadAllCommentsByPostId($conn,$tweetId);
+            $comment = Comment::loadAllCommentsByPostId($conn, $tweetId);
 
-            $numberOfComments=count($comment);
+            $numberOfComments = count($comment);
 
             echo "<article> <p>$creationDate, $email: <br> $text</p> </article>";
             echo "Ilość komentarzy: $numberOfComments";

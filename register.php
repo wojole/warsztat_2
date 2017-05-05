@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user1->setEmail($email);
                 $user1->saveToDB($conn);
                 $_SESSION["id"] = $user1->getId();
-                $_SESSION["username"] = $user1->getUsername();
+                $_SESSION["email"] = $user1->getEmail();
                 header('Location:main.php');
 
             } else {
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main>
 
     <form action="register.php" method="post">
-        Podaj nazwę użytkownika: <br/> <input type="text" name="login"/> <br/>
+        Podaj kilka informacji o sobie (możesz je później zmienić): <br/> <input type="text" name="login"/> <br/>
         Podaj swój email: <br/> <input type="text" name="email"/> <br/>
         Podaj hasło: <br/> <input type="password" name="password"/> <br/>
         Powtórz hasło: <br/> <input type="password" name="password2"/> <br/><br/>

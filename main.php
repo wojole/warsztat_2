@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <meta charset="utf-8">
-
     <title>Strona główna</title>
 
 
@@ -90,7 +89,7 @@ echo "Witaj {$_SESSION["email"]}!";
             $tweetId = $tweet1[$i]->getId();
             $comments = Comment::loadAllCommentsByPostId($conn, $tweetId);
 
-            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$email</a>: <br> $text<br><a href=\"postdetails.php?id=$tweetId\">Szczegóły wpisu</a></p></article>";
+            echo "<article> <p>$creationDate, <a href=\"alluserposts.php?id=$userId\">$email</a> dodał nowy post: <br> $text<br><a href=\"postdetails.php?id=$tweetId\">Szczegóły wpisu</a></p></article>";
 
             echo "Komentarze: <br>";
             echo "<form action=\"main.php\" method=\"post\">
@@ -104,13 +103,13 @@ echo "Witaj {$_SESSION["email"]}!";
                 $creation_date = $comments[$j]->getCreation_date();
                 $commentText = $comments[$j]->getText();
                 $user2 = User::loadUserById($conn, $commentUserId);
-                $commentUsername = $user2->getUsername();
+                $commentUsername = $user2->getEmail();
 
 
                 echo "<article><p>$creation_date, <a href=\"alluserposts.php?id=$commentUserId\">$commentUsername</a> skomentował: <br> $commentText</p> </article>";
 
             }
-
+            echo "<br>";
         }
         ?>
     </section>

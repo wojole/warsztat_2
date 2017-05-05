@@ -27,7 +27,7 @@ include_once 'src/Message.php';
 <!-- Here is our main header that is used accross all the pages of our website -->
 
 <header>
-    <h1><?php echo "{$_SESSION["email"]}:";?> Moje konto</h1>
+    <h1><?php echo "{$_SESSION["email"]}:"; ?> Moje konto</h1>
 
 </header>
 
@@ -36,19 +36,18 @@ include_once 'src/Message.php';
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
         <li><a href="messages.php">Wiadomości</a></li>
-        <li><a href="editAccount.php">Edytuj konto</a></li>
-        <li><a href="deleteConfirm.php">Usuń konto</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 </nav>
 
 <main>
-
+    <li><a href="editAccount.php">Edytuj konto</a></li>
+    <li><a href="deleteConfirm.php">Usuń konto</a></li>
     <!-- It contains an article -->
     <section>
         <h2>O mnie:</h2>
-     <?php $user1 = User::loadUserById($conn, $_SESSION['id']);
-     echo $user1->getUsername(); ?>
+        <?php $user1 = User::loadUserById($conn, $_SESSION['id']);
+        echo $user1->getUsername(); ?>
     </section>
 
 </main>

@@ -38,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <meta charset="utf-8">
-
     <title>My page title</title>
 
     <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
@@ -57,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <ul>
         <li><a href="main.php">Strona główna</a></li>
         <li><a href="userdetails.php">Moje konto</a></li>
+        <li><a href="messages.php">Wiadomości</a></li>
         <li><a href="logout.php">Wyloguj</a></li>
     </ul>
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $creation_date = $comments[$j]->getCreation_date();
             $commentText = $comments[$j]->getText();
             $user2 = User::loadUserById($conn, $commentUserId);
-            $commentUsername = $user2->getUsername();
+            $commentUsername = $user2->getEmail();
 
 
             echo "<p>$creation_date, $commentUsername skomentował: <br> $commentText</p>";
